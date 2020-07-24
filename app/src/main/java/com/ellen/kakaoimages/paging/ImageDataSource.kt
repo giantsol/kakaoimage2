@@ -58,4 +58,6 @@ class ImageDataSource(
         }
 
     }
+    fun refresh() =
+        this.invalidate()
 }

@@ -4,10 +4,15 @@ import androidx.lifecycle.LiveData
 import com.ellen.kakaoimages.network.repository.ImageRepository
 import com.ellen.kakaoimages.network.util.AppResult
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations.switchMap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.ellen.kakaoimages.data.model.ImagesDocuments
+import com.ellen.kakaoimages.paging.ImageDataSourceFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ImageViewModel(private val repository: ImageRepository) : ViewModel() {
@@ -44,37 +49,51 @@ class ImageViewModel(private val repository: ImageRepository) : ViewModel() {
         .setEnablePlaceholders(true)
         .build()
 
+    private val recipeDataSource = ImageDataSourceFactory(repository = repository, scope = CoroutineScope(Dispatchers.Default)
+    )
+
+    val recipes = LivePagedListBuilder(recipeDataSource, config).build()
+//    val networkState: LiveData<NetworkState>? = switchMap(recipeDataSource.source) { it.getNetworkState() }
+
+    fun fetchImages() {
+        val search = searchQuery.value.toString()
+        recipeDataSource.updateQuery(search)
+    }
+
+
+
+
     val userList = MutableLiveData<List<ImagesDocuments>>()
 
 
-    fun fetchImages() {
-        if (!isFinished) {
-            showLoading.value = true
-            viewModelScope.launch {
-                val result = repository.fetchUsers(searchQuery.value.toString(), page)
-                showLoading.postValue(false)
-                when (result) {
-                    is AppResult.Success -> {
-                        val data = result.data.documents
-                        if (!data.isNullOrEmpty()) {
-//                            var filter =HashSet<String>()
-//                            for(item in data){
-//                                filter.add(item.collection)
-//                            }
-                            page++
-                            userList.postValue(data)
-                            showError.postValue(null)
-                        } else {
-                            isFinished = true
-                            if (page == 1)
-                                showError.postValue("Result is empty")
-                        }
-                    }
-                    is AppResult.Error -> showError.postValue(result.message)
-                }
-            }
-        }//end isFinished
-    }
+//    fun fetchImages() {
+//        if (!isFinished) {
+//            showLoading.value = true
+//            viewModelScope.launch {
+//                val result = repository.fetchUsers(searchQuery.value.toString(), page)
+//                showLoading.postValue(false)
+//                when (result) {
+//                    is AppResult.Success -> {
+//                        val data = result.data.documents
+//                        if (!data.isNullOrEmpty()) {
+////                            var filter =HashSet<String>()
+////                            for(item in data){
+////                                filter.add(item.collection)
+////                            }
+//                            page++
+//                            userList.postValue(data)
+//                            showError.postValue(null)
+//                        } else {
+//                            isFinished = true
+//                            if (page == 1)
+//                                showError.postValue("Result is empty")
+//                        }
+//                    }
+//                    is AppResult.Error -> showError.postValue(result.message)
+//                }
+//            }
+//        }//end isFinished
+//    }
 
     fun init() {
         showError.value = null

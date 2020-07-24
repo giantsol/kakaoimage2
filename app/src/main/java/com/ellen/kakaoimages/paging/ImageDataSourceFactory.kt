@@ -7,7 +7,7 @@ import com.ellen.kakaoimages.network.repository.ImageRepository
 import kotlinx.coroutines.CoroutineScope
 
 
-class RecipeDataSourceFactory(
+class ImageDataSourceFactory(
     private val repository: ImageRepository,
     private var query: String = "",
     private val scope: CoroutineScope
@@ -22,5 +22,8 @@ class RecipeDataSourceFactory(
     }
 
     fun getSource() = source.value
-
+    fun updateQuery(query: String) {
+        this.query = query
+        getSource()?.refresh()
+    }
 }
