@@ -5,15 +5,31 @@ import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.databinding.DataBindingUtil
+import androidx.paging.PagedListAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.ellen.kakaoimages.R
 import com.ellen.kakaoimages.data.model.ImagesDocuments
 import com.ellen.kakaoimages.databinding.ItemSearchImageBinding
 
-class ImageListAdapter() : RecyclerView.Adapter<ImageListAdapter.ImageViewModel>(), Filterable {
+class ImageListAdapter() :
+    PagedListAdapter<ImagesDocuments, ImageListAdapter.ImageViewModel>(diffCallback), Filterable {
+    companion object {
+        private val diffCallback = object : DiffUtil.ItemCallback<ImagesDocuments>() {
+            override fun areItemsTheSame(
+                oldItem: ImagesDocuments,
+                newItem: ImagesDocuments
+            ): Boolean = oldItem == newItem
+
+            override fun areContentsTheSame(
+                oldItem: ImagesDocuments,
+                newItem: ImagesDocuments
+            ): Boolean = oldItem == newItem
+        }
+    }
 
     var imageList: ArrayList<ImagesDocuments> = ArrayList()
-    var filteredList:ArrayList<ImagesDocuments> = ArrayList()
+    var filteredList: ArrayList<ImagesDocuments> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewModel {
         val viewBinding: ItemSearchImageBinding = DataBindingUtil.inflate(
@@ -41,21 +57,23 @@ class ImageListAdapter() : RecyclerView.Adapter<ImageListAdapter.ImageViewModel>
     fun setImages(items: List<ImagesDocuments>) {
         val position = filteredList.size
         this.filteredList.addAll(items)
-        notifyItemRangeInserted(position,items.size)
+        notifyItemRangeInserted(position, items.size)
     }
 
-    fun clear(){
+    fun clear() {
         this.filteredList.clear()
         notifyDataSetChanged()
     }
+
     inner class ImageViewModel(private val viewBinding: ItemSearchImageBinding) :
         RecyclerView.ViewHolder(viewBinding.root) {
 
         fun onBind(position: Int) {
             val row = filteredList[position]
             viewBinding.item = row
-            } //end clickListener
-        }
+        } //end clickListener
+    }
+
     private var onItemClickListener: ((ImagesDocuments) -> Unit)? = null
     fun setOnItemClickListener(listener: (ImagesDocuments) -> Unit) {
         onItemClickListener = listener
@@ -69,7 +87,7 @@ class ImageListAdapter() : RecyclerView.Adapter<ImageListAdapter.ImageViewModel>
         //Automatic on background thread
         override fun performFiltering(constraint: CharSequence): FilterResults {
             if (constraint == null || constraint.isEmpty()) {
-                filteredList =imageList
+                filteredList = imageList
             } else {
                 var filteringList = ArrayList<ImagesDocuments>()
                 for (item in filteredList) {
