@@ -1,0 +1,113 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+def getProperty(String fileName, String key) {
+    def propsFile = rootProject.file(fileName)
+    if (propsFile.exists()) {
+        def props = new Properties()
+        props.load(new FileInputStream(propsFile))
+        if (props[key] != null) {
+            return props[key]
+        } else {
+            print("No such property " + key + " in file " + fileName)
+        }
+    } else {
+        print(fileName + " does not exist!")
+    }
+}
+
+android {
+    compileSdkVersion 29
+
+    defaultConfig {
+        applicationId "com.ellen.kakaoimages"
+        minSdkVersion 16
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField "String", "BASE_URL", "${getProperty("api.properties", "mUrl")}"
+        buildConfigField "String", "APP_KEY", "${getProperty("api.properties", "mKey")}"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            debuggable true
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    //textwatcher 등 core-ktx 사용 시
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
+    buildFeatures {
+        dataBinding = true
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+    implementation "androidx.core:core-ktx:$kotlinCore"
+
+    //Appcompat
+    implementation "androidx.appcompat:appcompat:$appCompat"
+
+    //Arch Components
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$viewModelScope"
+
+    //layout
+    implementation "androidx.constraintlayout:constraintlayout:$constraintLayout"
+    implementation "androidx.recyclerview:recyclerview:$recyclerView"
+    implementation "androidx.cardview:cardview:$cardView"
+
+
+    //network
+    implementation "com.squareup.retrofit2:retrofit:$retrofit"
+    implementation "com.squareup.retrofit2:converter-gson:$gsonConverter"
+    implementation "com.squareup.okhttp3:logging-interceptor:$httpLogging"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$rxadapter"
+
+
+    // DI
+    implementation "org.koin:koin-android:$koin"
+    implementation "org.koin:koin-android-viewmodel:$koin"
+    implementation "org.koin:koin-androidx-scope:$koin"
+    implementation "org.koin:koin-androidx-fragment:$koin"
+
+    // room
+    implementation "androidx.room:room-runtime:$room"
+    annotationProcessor "androidx.room:room-compiler:$room"
+    kapt "androidx.room:room-compiler:$room"
+    debugImplementation "com.amitshekhar.android:debug-db:$roomDebugging"
+
+
+    //glide
+    implementation "com.github.bumptech.glide:glide:$glide"
+
+    //leakCanary
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakcanary"
+
+    def paging_version = "2.1.2"
+    implementation "androidx.paging:paging-runtime:$paging_version" // For Kotlin use paging-runtime-ktx
+
+
+
+    //Test
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+}

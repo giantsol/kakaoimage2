@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+                <variable
+                    name="item"
+                    type="com.ellen.kakaoimages.data.model.ImagesDocuments" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:padding="@dimen/padding_side">
+
+        <ImageView
+            android:id="@+id/item_image_thumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:adjustViewBounds="true"
+            android:src="@{item.thumbnail_url}"
+            android:scaleType="centerCrop"
+            app:layout_constraintDimensionRatio="2:2.5"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/item_publish"
+            style="@style/TextViewContent"
+            android:layout_width="match_parent"
+            android:background="@color/content"
+            android:gravity="center"
+            android:text="@{item.display_sitename}"
+            android:padding="@dimen/padding_small"
+            android:textColor="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/item_image_thumbnail"
+            app:layout_constraintEnd_toEndOf="@+id/item_image_thumbnail"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

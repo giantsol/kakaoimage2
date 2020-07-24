@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">KakaoImages</string>
+    <string name="search">Search</string>
+    <string name="liked">Liked</string>
+<!--    exception-->
+
+    <string name="edittext_hint">Please input username</string>
+
+</resources>
