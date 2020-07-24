@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.ellen.kakaoimages.viewmodel.UsersViewModel" />
+            type="com.ellen.kakaoimages.viewmodel.ImageViewModel" />
 
     </data>
 

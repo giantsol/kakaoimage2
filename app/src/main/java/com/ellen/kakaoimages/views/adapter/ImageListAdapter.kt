@@ -32,6 +32,9 @@ class ImageListAdapter(val context: Context?) : RecyclerView.Adapter<ImageListAd
 
         holder.itemView.setOnClickListener {
 //            clickListener?.onItemClick(position, userList[position])
+            onItemClickListener?.let {
+                it(userList[position])
+            }
         }
     }
 
@@ -51,10 +54,13 @@ class ImageListAdapter(val context: Context?) : RecyclerView.Adapter<ImageListAd
         fun onBind(position: Int) {
             val row = userList[position]
             viewBinding.item = row
+            } //end clickListener
         }
+    private var onItemClickListener: ((ImagesDocuments) -> Unit)? = null
+    fun setOnItemClickListener(listener: (ImagesDocuments) -> Unit) {
+        onItemClickListener = listener
     }
 
 
+
 }
-
-

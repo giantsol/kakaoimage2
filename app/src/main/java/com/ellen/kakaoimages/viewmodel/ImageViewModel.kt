@@ -6,17 +6,28 @@ import com.ellen.kakaoimages.network.util.AppResult
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.ellen.kakaoimages.data.model.ImagesDocuments
 import kotlinx.coroutines.launch
 
-class UsersViewModel(private val repository: ImageRepository) : ViewModel() {
+class ImageViewModel(private val repository: ImageRepository) : ViewModel() {
 
     val showLoading = MutableLiveData<Boolean>()
     var showError = MutableLiveData<String>()
 
     val searchQuery = MutableLiveData<String>()
+    private val _selected = MutableLiveData<ImagesDocuments>()
+    fun select(item: ImagesDocuments) {
+        _selected.postValue(item)
+    }
+
+    private val _isSearchFrgShowing = MutableLiveData<Boolean>()
+    val isSearchFrgShowing: LiveData<Boolean>
+        get() = _isSearchFrgShowing
+
+    fun showDetailFragment() {
+        _isSearchFrgShowing.postValue(false)
+    }
 
     private var page: Int = 1
     private var isFinished: Boolean = false
@@ -31,7 +42,7 @@ class UsersViewModel(private val repository: ImageRepository) : ViewModel() {
     val userList = MutableLiveData<List<ImagesDocuments>>()
 
 
-    fun fetchUsers() {
+    fun fetchImages() {
         if (!isFinished) {
             showLoading.value = true
             viewModelScope.launch {
@@ -41,13 +52,17 @@ class UsersViewModel(private val repository: ImageRepository) : ViewModel() {
                     is AppResult.Success -> {
                         val data = result.data.documents
                         if (!data.isNullOrEmpty()) {
+                            var filter =HashSet<String>()
+                            for(item in data){
+                                filter.add(item.collection)
+                            }
                             page++
                             userList.postValue(data)
                             showError.postValue(null)
                         } else {
                             isFinished = true
                             if (page==1)
-                                showError.postValue("Result is Empty")
+                                showError.postValue("Result is empty")
                         }
                     }
                     is AppResult.Error -> showError.postValue(result.message)

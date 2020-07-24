@@ -3,18 +3,17 @@ package com.ellen.kakaoimages.views.ui
 import com.ellen.kakaoimages.R
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.MenuItem
 import androidx.databinding.DataBindingUtil
 import com.ellen.kakaoimages.databinding.ActivityMainBinding
 import com.ellen.kakaoimages.util.addFragment
 import com.ellen.kakaoimages.util.hideFragment
 import com.ellen.kakaoimages.util.showFragment
-import com.ellen.kakaoimages.viewmodel.UsersViewModel
+import com.ellen.kakaoimages.viewmodel.ImageViewModel
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
-    private val vm: UsersViewModel by viewModel()
+    private val vm: ImageViewModel by viewModel()
     private lateinit var mViewDataBinding: ActivityMainBinding
 
     private val searchFragment by inject<ImageSearchFragment>()

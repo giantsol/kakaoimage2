@@ -8,8 +8,7 @@ import android.content.Context
 import com.ellen.kakaoimages.data.model.ImagesResponse
 
 class ImageRepositoryImpl(
-    private val api: ImageApi,
-    private val context: Context
+    private val api: ImageApi
 ) :
     ImageRepository {
     companion object {
@@ -18,7 +17,7 @@ class ImageRepositoryImpl(
 
     override suspend fun getAllUsers(): AppResult<ImagesResponse> {
         return try {
-            val response = api.fetchImages("ellen", 1, DEFAULT_SIZE)
+            val response = api.fetchImages("cat", 1, DEFAULT_SIZE)
             if (response.isSuccessful) {
                 handleSuccess(response)
             } else {

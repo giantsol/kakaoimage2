@@ -1,7 +1,7 @@
 package com.ellen.kakaoimages.views.ui
 
 import com.ellen.kakaoimages.R
-import com.ellen.kakaoimages.viewmodel.UsersViewModel
+import com.ellen.kakaoimages.viewmodel.ImageViewModel
 import com.ellen.kakaoimages.views.adapter.ImageListAdapter
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,8 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.ellen.kakaoimages.databinding.FragmentSearchImageBinding
@@ -22,7 +20,7 @@ import org.koin.android.viewmodel.ext.android.sharedViewModel
 class ImageSearchFragment : UserBaseFragment()
      {
 
-    private val vm: UsersViewModel by sharedViewModel()
+    private val vm: ImageViewModel by sharedViewModel()
     private lateinit var imageListAdapter: ImageListAdapter
     private lateinit var mViewDataBinding: FragmentSearchImageBinding
     private lateinit var scrollListener: EndlessRecyclerViewScrollListener
@@ -44,7 +42,7 @@ class ImageSearchFragment : UserBaseFragment()
 
     override fun onSearch() {
         initPage()
-        vm.fetchUsers()
+        vm.fetchImages()
     }
 
     override fun onClear() {
@@ -83,7 +81,7 @@ class ImageSearchFragment : UserBaseFragment()
             var isKeyboardDismissedByScroll = false
 
             override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
-                vm.fetchUsers()
+                vm.fetchImages()
             }
 
             //Hide Keyboard when scroll Dragging
@@ -106,9 +104,11 @@ class ImageSearchFragment : UserBaseFragment()
             rv_search_user.adapter = imageListAdapter
         }
 
+        imageListAdapter.setOnItemClickListener {
+//            vm.select(it)
+//            vm.showDetailFragment()
+        }
     }
-
-
 
 
 }
