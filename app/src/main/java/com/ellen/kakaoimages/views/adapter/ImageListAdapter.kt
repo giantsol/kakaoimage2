@@ -1,58 +1,58 @@
 package com.ellen.kakaoimages.views.adapter
 
-import com.ellen.kakaoimages.R
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.ellen.kakaoimages.databinding.ItemSearchImageBinding
+import com.ellen.kakaoimages.R
 import com.ellen.kakaoimages.data.model.ImagesDocuments
+import com.ellen.kakaoimages.databinding.ItemSearchImageBinding
 
-//TODO: clickListener null일때처리(detail activity)
-class ImageListAdapter(val context: Context?) : RecyclerView.Adapter<ImageListAdapter.UserViewHolder>() {
+class ImageListAdapter() : RecyclerView.Adapter<ImageListAdapter.ImageViewModel>(), Filterable {
 
-    var userList: ArrayList<ImagesDocuments> = ArrayList()
+    var imageList: ArrayList<ImagesDocuments> = ArrayList()
+    var filteredList:ArrayList<ImagesDocuments> = ArrayList()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewModel {
         val viewBinding: ItemSearchImageBinding = DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
             R.layout.item_search_image, parent, false
         )
-        return UserViewHolder(viewBinding)
+        return ImageViewModel(viewBinding)
     }
 
 
     override fun getItemCount(): Int {
-        return userList.size
+        return filteredList.size
     }
 
-    override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
-        holder.onBind(position)
+    override fun onBindViewHolder(model: ImageViewModel, position: Int) {
+        model.onBind(position)
 
-        holder.itemView.setOnClickListener {
-//            clickListener?.onItemClick(position, userList[position])
+        model.itemView.setOnClickListener {
             onItemClickListener?.let {
-                it(userList[position])
+                it(filteredList[position])
             }
         }
     }
 
-    fun setUsers(items: List<ImagesDocuments>) {
-        val position = userList.size
-        this.userList.addAll(items)
+    fun setImages(items: List<ImagesDocuments>) {
+        val position = filteredList.size
+        this.filteredList.addAll(items)
         notifyItemRangeInserted(position,items.size)
     }
 
     fun clear(){
-        this.userList.clear()
+        this.filteredList.clear()
         notifyDataSetChanged()
     }
-    inner class UserViewHolder(private val viewBinding: ItemSearchImageBinding) :
+    inner class ImageViewModel(private val viewBinding: ItemSearchImageBinding) :
         RecyclerView.ViewHolder(viewBinding.root) {
 
         fun onBind(position: Int) {
-            val row = userList[position]
+            val row = filteredList[position]
             viewBinding.item = row
             } //end clickListener
         }
@@ -61,6 +61,38 @@ class ImageListAdapter(val context: Context?) : RecyclerView.Adapter<ImageListAd
         onItemClickListener = listener
     }
 
+    override fun getFilter(): Filter {
+        return collectionFilter
+    }
 
+    private val collectionFilter: Filter = object : Filter() {
+        //Automatic on background thread
+        override fun performFiltering(constraint: CharSequence): FilterResults {
+            if (constraint == null || constraint.isEmpty()) {
+                filteredList =imageList
+            } else {
+                var filteringList = ArrayList<ImagesDocuments>()
+                for (item in filteredList) {
+                    //TODO filter 대상 setting
+                    if (item.collection == constraint.toString()) {
+                        filteringList.add(item)
+                    }
+                }
+                filteredList = filteringList
+            }
+            val results = FilterResults()
+            results.values = filteredList
+            return results
+        }
+
+        //Automatic on UI thread
+        override fun publishResults(
+            constraint: CharSequence,
+            results: FilterResults
+        ) {
+            filteredList = results.values as ArrayList<ImagesDocuments>
+            notifyDataSetChanged()
+        }
+    }
 
 }

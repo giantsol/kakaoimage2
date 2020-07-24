@@ -14,10 +14,15 @@ class ImageViewModel(private val repository: ImageRepository) : ViewModel() {
 
     val showLoading = MutableLiveData<Boolean>()
     var showError = MutableLiveData<String>()
+    private val _filter = MutableLiveData<String>()
+    val filter: LiveData<String>
+        get() = _filter
+
 
     val searchQuery = MutableLiveData<String>()
     private val _selected = MutableLiveData<ImagesDocuments>()
     fun select(item: ImagesDocuments) {
+        _filter.postValue(item.collection)
         _selected.postValue(item)
     }
 
@@ -52,16 +57,16 @@ class ImageViewModel(private val repository: ImageRepository) : ViewModel() {
                     is AppResult.Success -> {
                         val data = result.data.documents
                         if (!data.isNullOrEmpty()) {
-                            var filter =HashSet<String>()
-                            for(item in data){
-                                filter.add(item.collection)
-                            }
+//                            var filter =HashSet<String>()
+//                            for(item in data){
+//                                filter.add(item.collection)
+//                            }
                             page++
                             userList.postValue(data)
                             showError.postValue(null)
                         } else {
                             isFinished = true
-                            if (page==1)
+                            if (page == 1)
                                 showError.postValue("Result is empty")
                         }
                     }

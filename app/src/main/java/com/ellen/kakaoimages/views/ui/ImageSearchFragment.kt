@@ -63,7 +63,7 @@ class ImageSearchFragment : UserBaseFragment()
         mViewDataBinding.viewModel = vm
         vm.userList.observe(viewLifecycleOwner, Observer {
             if (it.isNotEmpty() && it != null) {
-                imageListAdapter.setUsers(it)
+                imageListAdapter.setImages(it)
             }
         })
 
@@ -97,7 +97,7 @@ class ImageSearchFragment : UserBaseFragment()
             }
         }
 
-        imageListAdapter = ImageListAdapter(context)
+        imageListAdapter = ImageListAdapter()
         rv_search_user.apply {
             layoutManager = linearLayoutManager
             addOnScrollListener(scrollListener)
@@ -105,8 +105,9 @@ class ImageSearchFragment : UserBaseFragment()
         }
 
         imageListAdapter.setOnItemClickListener {
-//            vm.select(it)
+            vm.select(it)
 //            vm.showDetailFragment()
+            imageListAdapter.filter.filter(it.collection)
         }
     }
 
