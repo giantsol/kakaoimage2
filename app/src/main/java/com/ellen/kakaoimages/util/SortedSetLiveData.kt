@@ -7,7 +7,7 @@ import kotlin.collections.HashSet
 /**
  * Hash Set Live Data
  *
- * @author https://stackoverflow.com/a/54770540
+ * @reference https://stackoverflow.com/a/54770540
  */
 class SortedSetLiveData<V> : LiveData<SortedSet<V>>() {
 
@@ -20,15 +20,6 @@ class SortedSetLiveData<V> : LiveData<SortedSet<V>>() {
             oldData.add(v)
             oldData
         }
-
-//        value = if (oldData == null) {
-//
-////            hashSetOf(v)
-////            var tmp : SortedSet<V> = hashSetOf(v).toSortedSet()
-//        } else {
-//            oldData.add(v)
-//            oldData
-//        }
     }
 
     fun addAll(newData: SortedSet<V>) {

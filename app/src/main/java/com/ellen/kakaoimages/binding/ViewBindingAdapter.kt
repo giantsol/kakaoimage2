@@ -15,11 +15,3 @@ fun setSrc(v: ImageView, url: String?) {
     }
 }
 
-@BindingAdapter("imageResource")
-fun imageResource(v: ImageView, liked: Int) {
-    if (liked > 0) {
-        v.setImageResource(R.drawable.ic_star_filled)
-    } else {
-        v.setImageResource(R.drawable.ic_star_empty)
-    }
-}

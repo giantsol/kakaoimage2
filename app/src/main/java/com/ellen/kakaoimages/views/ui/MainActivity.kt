@@ -34,8 +34,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var scrollListener: EndlessRecyclerViewScrollListener
     private var job: Job? = null
 
-    //TODO: chk First 1. spinner 초기 all일때
-    private var beforeSelected = 0
+    private var beforeSelected = 0    //for Check Spinner Changed
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,10 +53,8 @@ class MainActivity : AppCompatActivity() {
                 ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, it.toTypedArray())
             spinner.setSelection(beforeSelected)
         })
-//
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
-//                spinner.setSelection(0)
             }
 
             override fun onItemSelected(
@@ -66,11 +63,10 @@ class MainActivity : AppCompatActivity() {
                 position: Int,
                 id: Long
             ) {
-                if (beforeSelected!=position) {
+                if (beforeSelected != position) {
                     Constants.FILTER = spinner.selectedItem.toString()
                     imageListAdapter.filter.filter(Constants.FILTER)
                 }
-                //TODO: 그냥 else로 할 경우 paging되서 spinner에 변화가 있으면 또 itemselected가 불려서 notify가 중복 호출됨
 
                 beforeSelected = position
             }
@@ -104,7 +100,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpRecyclerView() {
-        val linearLayoutManager = GridLayoutManager(this,2)
+        val linearLayoutManager = GridLayoutManager(this, 2)
         scrollListener = object : EndlessRecyclerViewScrollListener(linearLayoutManager) {
             var isKeyboardDismissedByScroll = false
 

@@ -16,7 +16,7 @@ class ImageListAdapter() : RecyclerView.Adapter<ImageListAdapter.ImageViewModel>
     var unFilteredList: ArrayList<ImagesDocuments> = ArrayList()
     var filteredList: ArrayList<ImagesDocuments> = unFilteredList
 
-    var addedList:ArrayList<ImagesDocuments> = ArrayList()
+    var addedList: ArrayList<ImagesDocuments> = ArrayList()
     private var filteredposition = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewModel {
@@ -45,7 +45,7 @@ class ImageListAdapter() : RecyclerView.Adapter<ImageListAdapter.ImageViewModel>
             filteredposition = position;
             addedList = items as ArrayList<ImagesDocuments>
             filter.filter(FILTER)
-        }else {
+        } else {
             filteredList = unFilteredList
             notifyItemRangeInserted(position, items.size)
         }
@@ -81,7 +81,6 @@ class ImageListAdapter() : RecyclerView.Adapter<ImageListAdapter.ImageViewModel>
             } else {
                 var filteringList = ArrayList<ImagesDocuments>()
                 for (item in unFilteredList) {
-                    //TODO filter 대상 setting
                     if (item.collection == constraint.toString()) {
                         filteringList.add(item)
                     }
@@ -108,7 +107,6 @@ class ImageListAdapter() : RecyclerView.Adapter<ImageListAdapter.ImageViewModel>
         override fun performFiltering(constraint: CharSequence): FilterResults {
             var filteringList = ArrayList<ImagesDocuments>()
             for (item in addedList) {
-                //TODO filter 대상 setting
                 if (item.collection == constraint.toString()) {
                     filteringList.add(item)
                 }
@@ -124,7 +122,7 @@ class ImageListAdapter() : RecyclerView.Adapter<ImageListAdapter.ImageViewModel>
             constraint: CharSequence,
             results: FilterResults
         ) {
-         var filteredAddedList = results.values as ArrayList<ImagesDocuments>
+            var filteredAddedList = results.values as ArrayList<ImagesDocuments>
             filteredList.addAll(filteredAddedList)
             notifyItemRangeInserted(filteredposition, filteredAddedList.size)
         }
