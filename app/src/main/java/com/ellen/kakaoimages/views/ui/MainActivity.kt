@@ -99,6 +99,8 @@ class MainActivity : AppCompatActivity() {
         vm.init()
         imageListAdapter.clear()
         scrollListener.resetState()
+        beforeSelected = 0
+        job = null
     }
 
     private fun setUpRecyclerView() {

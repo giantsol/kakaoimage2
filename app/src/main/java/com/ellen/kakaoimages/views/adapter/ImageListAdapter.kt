@@ -13,8 +13,8 @@ import com.ellen.kakaoimages.util.Constants.Companion.FILTER
 
 class ImageListAdapter() : RecyclerView.Adapter<ImageListAdapter.ImageViewModel>(), Filterable {
 
-    var unFilteredlist: ArrayList<ImagesDocuments> = ArrayList()
-    var filteredList: ArrayList<ImagesDocuments> = unFilteredlist
+    var unFilteredList: ArrayList<ImagesDocuments> = ArrayList()
+    var filteredList: ArrayList<ImagesDocuments> = unFilteredList
 
     var addedList:ArrayList<ImagesDocuments> = ArrayList()
     private var filteredposition = 0
@@ -39,20 +39,21 @@ class ImageListAdapter() : RecyclerView.Adapter<ImageListAdapter.ImageViewModel>
 
     fun setImages(items: List<ImagesDocuments>) {
         val position = filteredList.size
-        this.unFilteredlist.addAll(items)
+        this.unFilteredList.addAll(items)
 
         if (FILTER != "ALL") {
             filteredposition = position;
             addedList = items as ArrayList<ImagesDocuments>
             filter.filter(FILTER)
         }else {
-            filteredList = unFilteredlist
+            filteredList = unFilteredList
             notifyItemRangeInserted(position, items.size)
         }
     }
 
     fun clear() {
         this.filteredList.clear()
+        this.unFilteredList.clear()
         notifyDataSetChanged()
     }
 
@@ -76,10 +77,10 @@ class ImageListAdapter() : RecyclerView.Adapter<ImageListAdapter.ImageViewModel>
         //Automatic on background thread
         override fun performFiltering(constraint: CharSequence): FilterResults {
             if (constraint == null || constraint.isEmpty()) {
-                filteredList = unFilteredlist
+                filteredList = unFilteredList
             } else {
                 var filteringList = ArrayList<ImagesDocuments>()
-                for (item in unFilteredlist) {
+                for (item in unFilteredList) {
                     //TODO filter 대상 setting
                     if (item.collection == constraint.toString()) {
                         filteringList.add(item)

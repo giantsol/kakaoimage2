@@ -2,11 +2,11 @@ package com.ellen.kakaoimages.viewmodel
 
 import androidx.lifecycle.LiveData
 import com.ellen.kakaoimages.network.repository.ImageRepository
-import com.ellen.kakaoimages.network.util.AppResult
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ellen.kakaoimages.data.model.ImagesDocuments
+import com.ellen.kakaoimages.network.util.NetworkState
 import com.ellen.kakaoimages.util.Constants.Companion.FILTER
 import com.ellen.kakaoimages.util.SortedSetLiveData
 import kotlinx.coroutines.launch
@@ -24,12 +24,7 @@ class ImageViewModel(private val repository: ImageRepository) : ViewModel() {
     fun select(item: ImagesDocuments) {
         _selected.postValue(item)
     }
-
-
-
-
     val userList = MutableLiveData<List<ImagesDocuments>>()
-
 
     fun fetchImages(page:Int) {
             showLoading.value = true
@@ -37,7 +32,7 @@ class ImageViewModel(private val repository: ImageRepository) : ViewModel() {
                 val result = repository.fetchUsers(searchQuery.value.toString(), page)
                 showLoading.postValue(false)
                 when (result) {
-                    is AppResult.Success -> {
+                    is NetworkState.Success -> {
                         val data = result.data.documents
                         if (!data.isNullOrEmpty()) {
                             for (item in data) {
@@ -52,7 +47,7 @@ class ImageViewModel(private val repository: ImageRepository) : ViewModel() {
                                 showError.postValue("Result is empty")
                         }
                     }
-                    is AppResult.Error -> showError.postValue(result.message)
+                    is NetworkState.Failure -> showError.postValue(result.toString())
                 }
             }
     }
