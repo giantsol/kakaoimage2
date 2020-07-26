@@ -12,8 +12,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.ellen.kakaoimages.databinding.FragmentSearchImageBinding
-import com.ellen.kakaoimages.util.EndlessRecyclerViewScrollListener
-import com.ellen.kakaoimages.util.hideKeyboard
 import kotlinx.android.synthetic.main.fragment_search_image.*
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
@@ -21,9 +19,8 @@ class ImageSearchFragment : UserBaseFragment()
      {
 
     private val vm: ImageViewModel by sharedViewModel()
-    private lateinit var imageListAdapter: ImageListAdapter
+    private var imageListAdapter: ImageListAdapter = ImageListAdapter()
     private lateinit var mViewDataBinding: FragmentSearchImageBinding
-    private lateinit var scrollListener: EndlessRecyclerViewScrollListener
 
 
     override fun onCreateView(
@@ -61,53 +58,56 @@ class ImageSearchFragment : UserBaseFragment()
         setupEditText(ed_search)
 
         mViewDataBinding.viewModel = vm
-        vm.userList.observe(viewLifecycleOwner, Observer {
-            if (it.isNotEmpty() && it != null) {
-                imageListAdapter.setImages(it)
+//        vm.userList.observe(viewLifecycleOwner, Observer {
+//            if (it.isNotEmpty() && it != null) {
+//                imageListAdapter.setImages(it)
+//            }
+//        })
+
+        vm.projects.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                imageListAdapter.submitList(it)
             }
         })
+        /**
+         * Progress Loading
+         */
+//        projectListViewModel.networkState?.observe(this, Observer {
+//
+//            it?.let {
+//                when(it) {
+//                    is NetworkState.Loading -> showProgressBar(true)
+//                    is NetworkState.Success -> showProgressBar(false)
+//                    is NetworkState.Error -> {
+//                        showProgressBar(false)
+//                        if(it.errorCode == NO_DATA)
+//                            uiHelper.showSnackBar(main_rootView, resources.getString(R.string.error_no_data))
+//                        else if(it.errorCode == NO_MORE_DATA)
+//                            uiHelper.showSnackBar(main_rootView, resources.getString(R.string.error_no_more_data))
+//                        else uiHelper.showSnackBar(main_rootView, resources.getString(R.string.error_message))
+//                    }
+//                }
+//            }
+//        })
 
     }
 
     private fun initPage() {
         vm.init()
         imageListAdapter.clear()
-        scrollListener.resetState()
     }
 
     private fun setUpRecyclerView() {
         val linearLayoutManager = StaggeredGridLayoutManager(2,RecyclerView.VERTICAL)
-        scrollListener = object : EndlessRecyclerViewScrollListener(linearLayoutManager) {
-            var isKeyboardDismissedByScroll = false
 
-            override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
-                vm.fetchImages()
-            }
 
-            //Hide Keyboard when scroll Dragging
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-                    if (!isKeyboardDismissedByScroll) {
-                        hideKeyboard()
-                        isKeyboardDismissedByScroll = !isKeyboardDismissedByScroll
-                    }
-                } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    isKeyboardDismissedByScroll = false
-                }
-            }
-        }
-
-        imageListAdapter = ImageListAdapter()
-        rv_search_user.apply {
-            layoutManager = linearLayoutManager
-            addOnScrollListener(scrollListener)
+            rv_search_user.layoutManager = linearLayoutManager
             rv_search_user.adapter = imageListAdapter
-        }
 
         imageListAdapter.setOnItemClickListener {
             vm.select(it)
 //            vm.showDetailFragment()
-            imageListAdapter.filter.filter(it.collection)
+//            imageListAdapter.filter.filter(it.collection)
         }
     }
 
