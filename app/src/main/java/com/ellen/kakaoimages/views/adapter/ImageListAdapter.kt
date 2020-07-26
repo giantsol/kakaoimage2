@@ -34,18 +34,14 @@ class ImageListAdapter() : RecyclerView.Adapter<ImageListAdapter.ImageViewModel>
 
     override fun onBindViewHolder(model: ImageViewModel, position: Int) {
         model.onBind(position)
-        model.itemView.setOnClickListener {
-            onItemClickListener?.let {
-                it(filteredList[position])
-            }
-        }
+
     }
 
     fun setImages(items: List<ImagesDocuments>) {
         val position = filteredList.size
         this.unFilteredlist.addAll(items)
 
-        if (FILTER != "") {
+        if (FILTER != "ALL") {
             filteredposition = position;
             addedList = items as ArrayList<ImagesDocuments>
             filter.filter(FILTER)
@@ -69,13 +65,8 @@ class ImageListAdapter() : RecyclerView.Adapter<ImageListAdapter.ImageViewModel>
         } //end clickListener
     }
 
-    private var onItemClickListener: ((ImagesDocuments) -> Unit)? = null
-    fun setOnItemClickListener(listener: (ImagesDocuments) -> Unit) {
-        onItemClickListener = listener
-    }
-
     override fun getFilter(): Filter {
-        if (addedList.isNotEmpty() && FILTER != "") {
+        if (addedList.isNotEmpty() && FILTER != "ALL") {
             return loadMoreFilter
         } else
             return collectionFilter
@@ -88,7 +79,7 @@ class ImageListAdapter() : RecyclerView.Adapter<ImageListAdapter.ImageViewModel>
                 filteredList = unFilteredlist
             } else {
                 var filteringList = ArrayList<ImagesDocuments>()
-                for (item in filteredList) {
+                for (item in unFilteredlist) {
                     //TODO filter 대상 setting
                     if (item.collection == constraint.toString()) {
                         filteringList.add(item)
@@ -121,6 +112,7 @@ class ImageListAdapter() : RecyclerView.Adapter<ImageListAdapter.ImageViewModel>
                     filteringList.add(item)
                 }
             }
+            addedList = ArrayList() //when filter was changed it have to reset
             val results = FilterResults()
             results.values = filteringList
             return results

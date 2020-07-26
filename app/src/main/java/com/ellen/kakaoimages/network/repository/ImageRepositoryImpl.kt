@@ -15,19 +15,6 @@ class ImageRepositoryImpl(
         private const val DEFAULT_SIZE = 50
     }
 
-    override suspend fun getAllUsers(): AppResult<ImagesResponse> {
-        return try {
-            val response = api.fetchImages("cat", 1, DEFAULT_SIZE)
-            if (response.isSuccessful) {
-                handleSuccess(response)
-            } else {
-                handleApiError(response)
-            }
-        } catch (e: Exception) {
-            AppResult.Error(e.message)
-        }
-    }
-
     override suspend fun fetchUsers(q: String, page: Int): AppResult<ImagesResponse> {
         return try {
             val response = api.fetchImages(q, page, DEFAULT_SIZE)

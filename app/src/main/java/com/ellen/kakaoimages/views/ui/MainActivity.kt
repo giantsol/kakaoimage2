@@ -7,9 +7,12 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.MotionEvent
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.EditText
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.ellen.kakaoimages.databinding.ActivityMainBinding
@@ -31,6 +34,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var scrollListener: EndlessRecyclerViewScrollListener
     private var job: Job? = null
 
+    //TODO: chk First 1. spinner 초기 all일때
+    private var beforeSelected = 0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +45,37 @@ class MainActivity : AppCompatActivity() {
         mViewDataBinding.viewModel = vm
         mViewDataBinding.lifecycleOwner = this
 
+        /**
+         * CREATE SPINNER
+         */
+
+        vm.filter.observe(this, Observer {
+            spinner.adapter =
+                ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, it.toTypedArray())
+            spinner.setSelection(beforeSelected)
+        })
+//
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+//                spinner.setSelection(0)
+            }
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                if (beforeSelected!=position) {
+                    Constants.FILTER = spinner.selectedItem.toString()
+                    imageListAdapter.filter.filter(Constants.FILTER)
+                }
+                //TODO: 그냥 else로 할 경우 paging되서 spinner에 변화가 있으면 또 itemselected가 불려서 notify가 중복 호출됨
+
+                beforeSelected = position
+            }
+
+        }
 
         /**
          * RecyclerView
@@ -65,7 +102,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpRecyclerView() {
-        val linearLayoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
+        val linearLayoutManager = GridLayoutManager(this,2)
         scrollListener = object : EndlessRecyclerViewScrollListener(linearLayoutManager) {
             var isKeyboardDismissedByScroll = false
 
@@ -93,12 +130,6 @@ class MainActivity : AppCompatActivity() {
             rv_search_user.adapter = imageListAdapter
         }
 
-        imageListAdapter.setOnItemClickListener {
-            vm.select(it)
-//            vm.showDetailFragment()
-            Constants.FILTER = it.collection
-            imageListAdapter.filter.filter(Constants.FILTER)
-        }
     }
 
     private fun setupEditText(ed: EditText) {

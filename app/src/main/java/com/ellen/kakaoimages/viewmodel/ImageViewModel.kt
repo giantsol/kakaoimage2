@@ -8,31 +8,23 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ellen.kakaoimages.data.model.ImagesDocuments
 import com.ellen.kakaoimages.util.Constants.Companion.FILTER
+import com.ellen.kakaoimages.util.SortedSetLiveData
 import kotlinx.coroutines.launch
 
 class ImageViewModel(private val repository: ImageRepository) : ViewModel() {
 
     val showLoading = MutableLiveData<Boolean>()
     var showError = MutableLiveData<String>()
-    private val _filter = MutableLiveData<String>()
-    val filter: LiveData<String>
-        get() = _filter
+    val filter = SortedSetLiveData<String>()
 
 
     val searchQuery = MutableLiveData<String>()
+
     private val _selected = MutableLiveData<ImagesDocuments>()
     fun select(item: ImagesDocuments) {
-        _filter.postValue(item.collection)
         _selected.postValue(item)
     }
 
-    private val _isSearchFrgShowing = MutableLiveData<Boolean>()
-    val isSearchFrgShowing: LiveData<Boolean>
-        get() = _isSearchFrgShowing
-
-    fun showDetailFragment() {
-        _isSearchFrgShowing.postValue(false)
-    }
 
 
 
@@ -48,10 +40,11 @@ class ImageViewModel(private val repository: ImageRepository) : ViewModel() {
                     is AppResult.Success -> {
                         val data = result.data.documents
                         if (!data.isNullOrEmpty()) {
-//                            var filter =HashSet<String>()
-//                            for(item in data){
-//                                filter.add(item.collection)
-//                            }
+                            for (item in data) {
+                                if (filter.isEmpty())
+                                    filter.add("ALL")
+                                filter.add(item.collection)
+                            }
                             userList.postValue(data)
                             showError.postValue(null)
                         } else {
@@ -67,6 +60,7 @@ class ImageViewModel(private val repository: ImageRepository) : ViewModel() {
     fun init() {
         showError.value = null
         showLoading.value = false
-        FILTER = ""
+        FILTER = "ALL"
+        filter.clear()
     }
 }
