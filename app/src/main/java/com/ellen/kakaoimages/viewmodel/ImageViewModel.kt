@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ellen.kakaoimages.data.model.ImagesDocuments
+import com.ellen.kakaoimages.util.Constants.Companion.FILTER
 import kotlinx.coroutines.launch
 
 class ImageViewModel(private val repository: ImageRepository) : ViewModel() {
@@ -33,15 +34,12 @@ class ImageViewModel(private val repository: ImageRepository) : ViewModel() {
         _isSearchFrgShowing.postValue(false)
     }
 
-    private var page: Int = 1
-    private var isFinished: Boolean = false
 
 
     val userList = MutableLiveData<List<ImagesDocuments>>()
 
 
-    fun fetchImages() {
-        if (!isFinished) {
+    fun fetchImages(page:Int) {
             showLoading.value = true
             viewModelScope.launch {
                 val result = repository.fetchUsers(searchQuery.value.toString(), page)
@@ -54,11 +52,9 @@ class ImageViewModel(private val repository: ImageRepository) : ViewModel() {
 //                            for(item in data){
 //                                filter.add(item.collection)
 //                            }
-                            page++
                             userList.postValue(data)
                             showError.postValue(null)
                         } else {
-                            isFinished = true
                             if (page == 1)
                                 showError.postValue("Result is empty")
                         }
@@ -66,13 +62,11 @@ class ImageViewModel(private val repository: ImageRepository) : ViewModel() {
                     is AppResult.Error -> showError.postValue(result.message)
                 }
             }
-        }//end isFinished
     }
 
     fun init() {
         showError.value = null
         showLoading.value = false
-        page = 1
-        isFinished = false
+        FILTER = ""
     }
 }
