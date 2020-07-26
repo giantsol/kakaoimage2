@@ -79,6 +79,7 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:$gsonConverter"
     implementation "com.squareup.okhttp3:logging-interceptor:$httpLogging"
 
+
     // DI
     implementation "org.koin:koin-android:$koin"
     implementation "org.koin:koin-android-viewmodel:$koin"

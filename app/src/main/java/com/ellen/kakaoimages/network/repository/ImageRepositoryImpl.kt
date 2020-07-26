@@ -12,7 +12,7 @@ class ImageRepositoryImpl(
         private const val DEFAULT_SIZE = 50
     }
 
-    override suspend fun fetchUsers(q: String, page: Int): NetworkState<ImagesResponse> {
+    override suspend fun fetchImages(q: String, page: Int): NetworkState<ImagesResponse> {
         return try {
             val response = api.fetchImages(q, page, DEFAULT_SIZE)
             if (response.isSuccessful) {
