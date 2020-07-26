@@ -14,7 +14,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.ellen.kakaoimages.databinding.ActivityMainBinding
 import com.ellen.kakaoimages.util.*
 import com.ellen.kakaoimages.viewmodel.ImageViewModel
@@ -24,7 +23,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
@@ -80,7 +78,7 @@ class MainActivity : AppCompatActivity() {
         /**
          * EditText
          */
-        setupEditText(ed_search)
+        setupEditText()
 
         mViewDataBinding.viewModel = vm
         vm.userList.observe(this, Observer {
@@ -130,12 +128,12 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun setupEditText(ed: EditText) {
+    private fun setupEditText() {
 
-        ed.addTextChangedListener(object : TextWatcher {
+        ed_search.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(editable: Editable?) {
                 val clearIcon = if (editable?.isNotEmpty() == true) R.drawable.ic_clear else 0
-                ed.setCompoundDrawablesWithIntrinsicBounds(0, 0, clearIcon, 0)
+                ed_search.setCompoundDrawablesWithIntrinsicBounds(0, 0, clearIcon, 0)
                 job?.cancel()
                 job = MainScope().launch {
                     delay(500L)
@@ -156,8 +154,9 @@ class MainActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
         })
 
-        ed.setOnTouchListener(View.OnTouchListener { v, event ->
+        ed_search.setOnTouchListener(View.OnTouchListener { v, event ->
             if (event.action == MotionEvent.ACTION_UP) {
+                v.performClick()
                 if (event.rawX >= ((v as EditText).right - v.compoundPaddingRight)) {
                     v.setText("")
                     initPage()

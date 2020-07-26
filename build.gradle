@@ -30,11 +30,11 @@ ext {
     compileSdk = 29
 
     // App dependencies
-    kotlinCore = '1.3.0'
+    kotlinCore = '1.3.1'
     appCompat = '1.3.0-alpha01'
 
     //Arch
-    viewModelScope = '2.3.0-alpha05'
+    viewModelScope = '2.3.0-alpha06'
 
     //layout
     constraintLayout = '2.0.0-beta8'
