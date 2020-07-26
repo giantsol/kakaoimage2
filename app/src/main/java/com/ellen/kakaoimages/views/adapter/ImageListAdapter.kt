@@ -5,13 +5,29 @@ import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.databinding.DataBindingUtil
+import androidx.paging.PagedListAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.ellen.kakaoimages.R
 import com.ellen.kakaoimages.data.model.ImagesDocuments
 import com.ellen.kakaoimages.databinding.ItemSearchImageBinding
 import com.ellen.kakaoimages.util.Constants.Companion.FILTER
 
-class ImageListAdapter() : RecyclerView.Adapter<ImageListAdapter.ImageViewModel>(), Filterable {
+class ImageListAdapter() :
+    PagedListAdapter<ImagesDocuments, ImageListAdapter.ImageViewModel>(diffCallback), Filterable {
+    companion object {
+        private val diffCallback = object : DiffUtil.ItemCallback<ImagesDocuments>() {
+            override fun areItemsTheSame(
+                oldItem: ImagesDocuments,
+                newItem: ImagesDocuments
+            ): Boolean = oldItem == newItem
+
+            override fun areContentsTheSame(
+                oldItem: ImagesDocuments,
+                newItem: ImagesDocuments
+            ): Boolean = oldItem == newItem
+        }
+    }
 
     var unFilteredList: ArrayList<ImagesDocuments> = ArrayList()
     var filteredList: ArrayList<ImagesDocuments> = unFilteredList
