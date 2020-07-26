@@ -15,7 +15,7 @@ class KakaoImageApplication : Application() {
             androidContext(this@KakaoImageApplication)
             modules(
                 apiModule,
-                mainModule,
+                viewModelModule,
                 repositoryModule,
                 networkModule
             )
