@@ -1,4 +1,4 @@
-package com.ellen.kakaoimages.views.adapter
+package com.ellen.kakaoimages.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

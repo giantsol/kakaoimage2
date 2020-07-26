@@ -1,6 +1,6 @@
 package com.ellen.kakaoimages.di
 
-import com.ellen.kakaoimages.viewmodel.ImageViewModel
+import com.ellen.kakaoimages.ui.viewmodel.ImageViewModel
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 

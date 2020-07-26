@@ -1,4 +1,4 @@
-package com.ellen.kakaoimages.views.ui
+package com.ellen.kakaoimages.ui.view
 
 import android.content.Intent
 import android.os.Bundle

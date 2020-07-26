@@ -1,4 +1,4 @@
-package com.ellen.kakaoimages.views.ui
+package com.ellen.kakaoimages.ui.view
 
 import com.ellen.kakaoimages.R
 import androidx.appcompat.app.AppCompatActivity
@@ -16,8 +16,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ellen.kakaoimages.databinding.ActivityMainBinding
 import com.ellen.kakaoimages.util.*
-import com.ellen.kakaoimages.viewmodel.ImageViewModel
-import com.ellen.kakaoimages.views.adapter.ImageListAdapter
+import com.ellen.kakaoimages.ui.viewmodel.ImageViewModel
+import com.ellen.kakaoimages.ui.adapter.ImageListAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope

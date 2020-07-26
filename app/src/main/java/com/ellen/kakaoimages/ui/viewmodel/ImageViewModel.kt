@@ -1,4 +1,4 @@
-package com.ellen.kakaoimages.viewmodel
+package com.ellen.kakaoimages.ui.viewmodel
 
 import com.ellen.kakaoimages.network.repository.ImageRepository
 import androidx.lifecycle.MutableLiveData
