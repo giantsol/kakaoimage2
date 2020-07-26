@@ -6,9 +6,9 @@ import retrofit2.Retrofit
 
 val apiModule = module {
 
-    fun provideUsersApi(retrofit: Retrofit): ImageApi {
+    fun provideImageApi(retrofit: Retrofit): ImageApi {
         return retrofit.create(ImageApi::class.java)
     }
-    single { provideUsersApi(get()) }
+    single { provideImageApi(get()) }
 
 }

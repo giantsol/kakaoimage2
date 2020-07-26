@@ -7,9 +7,9 @@ import org.koin.dsl.module
 
 val repositoryModule = module {
 
-    fun provideUsersRepository(api: ImageApi): ImageRepository {
+    fun provideImageRepository(api: ImageApi): ImageRepository {
         return ImageRepositoryImpl(api)
     }
-    single { provideUsersRepository(get()) }
+    single { provideImageRepository(get()) }
 
 }

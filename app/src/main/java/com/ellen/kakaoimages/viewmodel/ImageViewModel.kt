@@ -15,26 +15,21 @@ class ImageViewModel(private val repository: ImageRepository) : ViewModel() {
     val showLoading = MutableLiveData<Boolean>()
     var showError = MutableLiveData<String>()
     val searchQuery = MutableLiveData<String>()
+
     val filter = SortedSetLiveData<String>()
-
-
-    val userList = MutableLiveData<List<ImagesDocuments>>()
+    val imageList = MutableLiveData<List<ImagesDocuments>>()
 
     fun fetchImages(page: Int) {
         showLoading.value = true
         viewModelScope.launch {
-            val result = repository.fetchUsers(searchQuery.value.toString(), page)
+            val result = repository.fetchImages(searchQuery.value.toString(), page)
             showLoading.postValue(false)
             when (result) {
                 is NetworkState.Success -> {
                     val data = result.data.documents
                     if (!data.isNullOrEmpty()) {
-                        for (item in data) {
-                            if (filter.isEmpty())
-                                filter.add("ALL")
-                            filter.add(item.collection)
-                        }
-                        userList.postValue(data)
+                        setFilter(data)
+                        imageList.postValue(data)
                         showError.postValue(null)
                     } else {
                         if (page == 1)
@@ -44,6 +39,14 @@ class ImageViewModel(private val repository: ImageRepository) : ViewModel() {
                 is NetworkState.Failure ->
                     showError.postValue(result.message)
             }
+        }
+    }
+
+    private fun setFilter(data: List<ImagesDocuments>) {
+        for (item in data) {
+            if (filter.isEmpty())
+                filter.add("ALL")
+            filter.add(item.collection)
         }
     }
 

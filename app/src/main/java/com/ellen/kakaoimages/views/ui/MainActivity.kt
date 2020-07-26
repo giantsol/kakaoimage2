@@ -43,34 +43,9 @@ class MainActivity : AppCompatActivity() {
         mViewDataBinding.lifecycleOwner = this
 
         /**
-         * CREATE SPINNER
+         * SPINNER
          */
-
-        vm.filter.observe(this, Observer {
-            spinner.adapter =
-                ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, it.toTypedArray())
-            spinner.setSelection(beforeSelected)
-        })
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
-
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                if (beforeSelected != position) {
-                    Constants.FILTER = spinner.selectedItem.toString()
-                    imageListAdapter.filter.filter(Constants.FILTER)
-                }
-
-                beforeSelected = position
-            }
-
-        }
-
+        setupFilter()
         /**
          * RecyclerView
          */
@@ -81,7 +56,7 @@ class MainActivity : AppCompatActivity() {
         setupEditText()
 
         mViewDataBinding.viewModel = vm
-        vm.userList.observe(this, Observer {
+        vm.imageList.observe(this, Observer {
             if (it.isNotEmpty() && it != null) {
                 imageListAdapter.setImages(it)
             }
@@ -120,10 +95,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         imageListAdapter = ImageListAdapter()
-        rv_search_user.apply {
+        rv_images.apply {
             layoutManager = linearLayoutManager
             addOnScrollListener(scrollListener)
-            rv_search_user.adapter = imageListAdapter
+            rv_images.adapter = imageListAdapter
         }
 
     }
@@ -147,9 +122,8 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) =
+                Unit
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
         })
@@ -167,12 +141,34 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    override fun onBackPressed() {
-        if (supportFragmentManager.backStackEntryCount > 0) {
-            supportFragmentManager.popBackStack()
-        } else {
-            super.onBackPressed()
+    private fun setupFilter() {
+        vm.filter.observe(this, Observer {
+            spinner.adapter =
+                ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, it.toTypedArray())
+            spinner.setSelection(beforeSelected)
+        })
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) = Unit
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                if (beforeSelected != position) {
+                    Constants.FILTER = spinner.selectedItem.toString()
+                    imageListAdapter.filter.filter(Constants.FILTER)
+                }
+
+                beforeSelected = position
+            }
+
         }
+    }
+
+    override fun onBackPressed() {
+        if (closeBackPressed(this)) super.onBackPressed()
     }
 
 }

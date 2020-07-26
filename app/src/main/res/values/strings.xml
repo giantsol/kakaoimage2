@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">KakaoImages</string>
-    <string name="edittext_hint">Please input username</string>
+    <string name="edittext_hint">Please input keyword</string>
+    <string name="close_back_pressed">뒤로가기를 한번 더 누르면 앱이 종료됩니다</string>
 </resources>
