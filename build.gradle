@@ -25,7 +25,7 @@ allprojects {
 }
 ext {
     // Sdk and tools
-    minSdk = 16
+    minSdk = 23
     targetSdk = 29
     compileSdk = 29
 
@@ -39,25 +39,19 @@ ext {
     //layout
     constraintLayout = '2.0.0-beta8'
     recyclerView = '1.1.0'
-    cardView = '1.0.0'
 
     //DI
     koin = '2.1.6'
 
     //network
     retrofit = '2.9.0'
-    rxadapter = '2.7.1'
     gsonConverter = '2.9.0'
     httpLogging = '4.3.1'
 
-    //room
-    room = '2.2.5'
-    roomDebugging = '1.0.6'
 
     // Others
     glide = '4.11.0'
     leakcanary = '2.4'
-    junit = '4.12'
 }
 task clean(type: Delete) {
     delete rootProject.buildDir
