@@ -6,7 +6,6 @@ import com.ellen.kakaoimages.network.util.AppResult
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagedList
 import com.ellen.kakaoimages.data.model.ImagesDocuments
 import kotlinx.coroutines.launch
 
@@ -37,12 +36,6 @@ class ImageViewModel(private val repository: ImageRepository) : ViewModel() {
     private var page: Int = 1
     private var isFinished: Boolean = false
 
-    val config = PagedList.Config.Builder()
-        .setInitialLoadSizeHint(20)
-        .setPageSize(50)
-        .setPrefetchDistance(5)
-        .setEnablePlaceholders(true)
-        .build()
 
     val userList = MutableLiveData<List<ImagesDocuments>>()
 
