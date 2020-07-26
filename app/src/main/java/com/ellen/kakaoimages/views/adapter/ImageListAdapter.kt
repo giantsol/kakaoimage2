@@ -76,7 +76,7 @@ class ImageListAdapter() : RecyclerView.Adapter<ImageListAdapter.ImageViewModel>
     private val collectionFilter: Filter = object : Filter() {
         //Automatic on background thread
         override fun performFiltering(constraint: CharSequence): FilterResults {
-            if (constraint == null || constraint.isEmpty()) {
+            if (constraint == "ALL" || constraint.isEmpty()) {
                 filteredList = unFilteredList
             } else {
                 var filteringList = ArrayList<ImagesDocuments>()
