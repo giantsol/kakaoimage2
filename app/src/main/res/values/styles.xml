@@ -7,23 +7,12 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorPrimaryDark</item>
         <item name="android:textColor">@color/content</item>
-        <item name="colorControlHighlight" >@color/title_unclicked</item>
+        <item name="colorControlHighlight" >@color/colorHighlight</item>
 
     </style>
 
     <style name="SplashTheme" parent="AppTheme">
         <item name="android:windowBackground">@drawable/splash_background</item>
-    </style>
-
-    <style name="TextViewTitle">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">?attr/actionBarSize</item>
-        <item name="android:paddingBottom">@dimen/padding_small</item>
-        <item name="android:textColor">@color/content</item>
-        <item name="android:textSize">@dimen/txt_size_title</item>
-        <item name="layout_constraintHorizontal_weight">1</item>
-        <item name="android:background">@android:color/white</item>
-        <item name="android:gravity">center</item>
     </style>
 
 
@@ -37,14 +26,6 @@
         <item name="layout_constrainedWidth">true</item>
         <item name="android:singleLine">true</item>
 
-    </style>
-
-    <style name="ImageView">
-        <item name="android:adjustViewBounds">true</item>
-        <item name="android:scaleType">fitXY</item>
-        <item name="android:layout_width">?attr/actionBarSize</item>
-        <item name="android:layout_height">?attr/actionBarSize</item>
-        <item name="android:layout_marginRight">@dimen/padding_side</item>
     </style>
 
     <style name="EditTextInput">

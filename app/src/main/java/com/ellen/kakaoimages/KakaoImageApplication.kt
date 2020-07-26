@@ -10,12 +10,12 @@ class KakaoImageApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-      startKoin {
+        startKoin {
             androidLogger()
             androidContext(this@KakaoImageApplication)
             modules(
                 apiModule,
-                mainModule,
+                viewModelModule,
                 repositoryModule,
                 networkModule
             )

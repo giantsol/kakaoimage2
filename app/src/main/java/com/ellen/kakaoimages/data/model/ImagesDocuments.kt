@@ -1,10 +1,16 @@
 package com.ellen.kakaoimages.data.model
 
+import com.google.gson.annotations.SerializedName
+
 data class ImagesDocuments(
     val collection: String,
-    val thumbnail_url: String,
-    val image_url: String,
-    val display_sitename: String,
-    val doc_url: String,
+    @SerializedName("thumbnail_url")
+    val thumbnailUrl: String,
+    @SerializedName("image_url")
+    val imageUrl: String,
+    @SerializedName("display_sitename")
+    val displaySitename: String,
+    @SerializedName("doc_url")
+    val docUrl: String,
     val datetime: String
 )

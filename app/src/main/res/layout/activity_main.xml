@@ -17,15 +17,29 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-        <FrameLayout
-            android:id="@+id/fragment_container"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <EditText
+            android:id="@+id/ed_search"
+            style="@style/EditTextInput"
+            android:text="@={viewModel.searchQuery}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/spinner"
+            style="@style/TextViewContent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ed_search" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_search_user"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:visibility="@{viewModel.showError == null ? View.VISIBLE : View.GONE}"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinner"
+            tools:listitem="@layout/item_search_image" />
 
         <ProgressBar
             android:id="@+id/progressbar"
@@ -40,8 +54,7 @@
 
         <TextView
             android:id="@+id/tv_error"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/TextViewContent"
             android:text="@{viewModel.showError}"
             android:visibility="@{viewModel.showError == null ? View.GONE : View.VISIBLE}"
             app:layout_constraintBottom_toBottomOf="parent"

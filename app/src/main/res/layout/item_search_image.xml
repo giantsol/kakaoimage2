@@ -8,9 +8,9 @@
 
         <import type="android.view.View" />
 
-                <variable
-                    name="item"
-                    type="com.ellen.kakaoimages.data.model.ImagesDocuments" />
+        <variable
+            name="item"
+            type="com.ellen.kakaoimages.data.model.ImagesDocuments" />
 
     </data>
 
@@ -25,8 +25,8 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:adjustViewBounds="true"
-            android:src="@{item.thumbnail_url}"
             android:scaleType="centerCrop"
+            android:src="@{item.thumbnailUrl}"
             app:layout_constraintDimensionRatio="2:2.5"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -37,8 +37,8 @@
             android:layout_width="match_parent"
             android:background="@color/content"
             android:gravity="center"
-            android:text="@{item.display_sitename}"
             android:padding="@dimen/padding_small"
+            android:text="@{item.displaySitename}"
             android:textColor="@android:color/white"
             app:layout_constraintBottom_toBottomOf="@+id/item_image_thumbnail"
             app:layout_constraintEnd_toEndOf="@+id/item_image_thumbnail"

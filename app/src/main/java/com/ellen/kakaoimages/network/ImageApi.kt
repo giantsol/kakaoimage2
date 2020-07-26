@@ -4,12 +4,13 @@ import com.ellen.kakaoimages.data.model.ImagesResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
-import retrofit2.http.QueryMap
 
 interface ImageApi {
     @GET("/v2/search/image")
-    suspend fun fetchImages(@Query("query") query: String,
-                            @Query("page") page: Int,
-                            @Query("size") size: Int): Response<ImagesResponse>
+    suspend fun fetchImages(
+        @Query("query") query: String,
+        @Query("page") page: Int,
+        @Query("size") size: Int
+    ): Response<ImagesResponse>
 
 }

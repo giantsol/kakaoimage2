@@ -3,6 +3,5 @@
     <dimen name="padding_side">16dp</dimen>
     <dimen name="padding_small">8dp</dimen>
 
-    <dimen name="txt_size_title">22sp</dimen>
     <dimen name="txt_size_content">20sp</dimen>
 </resources>

@@ -19,12 +19,12 @@ def getProperty(String fileName, String key) {
 }
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion rootProject.compileSdk
 
     defaultConfig {
         applicationId "com.ellen.kakaoimages"
-        minSdkVersion 16
-        targetSdkVersion 29
+        minSdkVersion rootProject.minSdk
+        targetSdkVersion rootProject.targetSdk
         versionCode 1
         versionName "1.0"
 
@@ -72,21 +72,16 @@ dependencies {
     //layout
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayout"
     implementation "androidx.recyclerview:recyclerview:$recyclerView"
-    implementation "androidx.cardview:cardview:$cardView"
 
 
     //network
     implementation "com.squareup.retrofit2:retrofit:$retrofit"
     implementation "com.squareup.retrofit2:converter-gson:$gsonConverter"
     implementation "com.squareup.okhttp3:logging-interceptor:$httpLogging"
-    implementation "com.squareup.retrofit2:adapter-rxjava2:$rxadapter"
-//TODO: 이 call adapter를 빼도되나 ..?
 
     // DI
     implementation "org.koin:koin-android:$koin"
     implementation "org.koin:koin-android-viewmodel:$koin"
-    implementation "org.koin:koin-androidx-scope:$koin"
-    implementation "org.koin:koin-androidx-fragment:$koin"
 
 
     //glide
@@ -94,12 +89,6 @@ dependencies {
 
     //leakCanary
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakcanary"
-
-    //TODO: 버전 처리할 것
-    def paging_version = "2.1.2"
-    implementation "androidx.paging:paging-runtime:$paging_version" // For Kotlin use paging-runtime-ktx
-//Coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.5'
 
 
     //Test

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ellen.kakaoimages.R
 import com.ellen.kakaoimages.data.model.ImagesDocuments
 import com.ellen.kakaoimages.databinding.ItemSearchImageBinding
+import com.ellen.kakaoimages.util.Constants.Companion.FILTER
 
 class ImageListAdapter() :
     PagedListAdapter<ImagesDocuments, ImageListAdapter.ImageViewModel>(diffCallback), Filterable {
@@ -28,8 +29,11 @@ class ImageListAdapter() :
         }
     }
 
-    var imageList: ArrayList<ImagesDocuments> = ArrayList()
-    var filteredList: ArrayList<ImagesDocuments> = ArrayList()
+    var unFilteredList: ArrayList<ImagesDocuments> = ArrayList()
+    var filteredList: ArrayList<ImagesDocuments> = unFilteredList
+
+    var addedList: ArrayList<ImagesDocuments> = ArrayList()
+    private var filteredposition = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewModel {
         val viewBinding: ItemSearchImageBinding = DataBindingUtil.inflate(
@@ -47,21 +51,25 @@ class ImageListAdapter() :
     override fun onBindViewHolder(model: ImageViewModel, position: Int) {
         model.onBind(position)
 
-        model.itemView.setOnClickListener {
-            onItemClickListener?.let {
-                it(filteredList[position])
-            }
-        }
     }
 
     fun setImages(items: List<ImagesDocuments>) {
         val position = filteredList.size
-        this.filteredList.addAll(items)
-        notifyItemRangeInserted(position, items.size)
+        this.unFilteredList.addAll(items)
+
+        if (FILTER != "ALL") {
+            filteredposition = position;
+            addedList = items as ArrayList<ImagesDocuments>
+            filter.filter(FILTER)
+        } else {
+            filteredList = unFilteredList
+            notifyItemRangeInserted(position, items.size)
+        }
     }
 
     fun clear() {
         this.filteredList.clear()
+        this.unFilteredList.clear()
         notifyDataSetChanged()
     }
 
@@ -74,24 +82,21 @@ class ImageListAdapter() :
         } //end clickListener
     }
 
-    private var onItemClickListener: ((ImagesDocuments) -> Unit)? = null
-    fun setOnItemClickListener(listener: (ImagesDocuments) -> Unit) {
-        onItemClickListener = listener
-    }
-
     override fun getFilter(): Filter {
-        return collectionFilter
+        if (addedList.isNotEmpty() && FILTER != "ALL") {
+            return loadMoreFilter
+        } else
+            return collectionFilter
     }
 
     private val collectionFilter: Filter = object : Filter() {
         //Automatic on background thread
         override fun performFiltering(constraint: CharSequence): FilterResults {
-            if (constraint == null || constraint.isEmpty()) {
-                filteredList = imageList
+            if (constraint == "ALL" || constraint.isEmpty()) {
+                filteredList = unFilteredList
             } else {
                 var filteringList = ArrayList<ImagesDocuments>()
-                for (item in filteredList) {
-                    //TODO filter 대상 setting
+                for (item in unFilteredList) {
                     if (item.collection == constraint.toString()) {
                         filteringList.add(item)
                     }
@@ -110,6 +115,32 @@ class ImageListAdapter() :
         ) {
             filteredList = results.values as ArrayList<ImagesDocuments>
             notifyDataSetChanged()
+        }
+    }
+
+    private val loadMoreFilter: Filter = object : Filter() {
+        //Automatic on background thread
+        override fun performFiltering(constraint: CharSequence): FilterResults {
+            var filteringList = ArrayList<ImagesDocuments>()
+            for (item in addedList) {
+                if (item.collection == constraint.toString()) {
+                    filteringList.add(item)
+                }
+            }
+            addedList = ArrayList() //when filter was changed it have to reset
+            val results = FilterResults()
+            results.values = filteringList
+            return results
+        }
+
+        //Automatic on UI thread
+        override fun publishResults(
+            constraint: CharSequence,
+            results: FilterResults
+        ) {
+            var filteredAddedList = results.values as ArrayList<ImagesDocuments>
+            filteredList.addAll(filteredAddedList)
+            notifyItemRangeInserted(filteredposition, filteredAddedList.size)
         }
     }
 
