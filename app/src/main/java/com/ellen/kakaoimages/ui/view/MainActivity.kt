@@ -27,13 +27,14 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
     private val vm: ImageViewModel by viewModel()
+    private val imageListAdapter: ImageListAdapter by lazy {
+        ImageListAdapter()
+    }
     private lateinit var mViewDataBinding: ActivityMainBinding
-    private lateinit var imageListAdapter: ImageListAdapter
     private lateinit var scrollListener: EndlessRecyclerViewScrollListener
     private var job: Job? = null
 
     private var beforeSelected = 0    //for Check Spinner Changed
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,22 +43,12 @@ class MainActivity : AppCompatActivity() {
         mViewDataBinding.viewModel = vm
         mViewDataBinding.lifecycleOwner = this
 
-        /**
-         * SPINNER
-         */
         setupFilter()
-        /**
-         * RecyclerView
-         */
         setUpRecyclerView()
-        /**
-         * EditText
-         */
         setupEditText()
 
-        mViewDataBinding.viewModel = vm
         vm.imageList.observe(this, Observer {
-            if (it.isNotEmpty() && it != null) {
+            if (it.isNotEmpty()) {
                 imageListAdapter.setImages(it)
             }
         })
@@ -73,12 +64,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpRecyclerView() {
-        val linearLayoutManager = GridLayoutManager(this, 2)
-        scrollListener = object : EndlessRecyclerViewScrollListener(linearLayoutManager) {
+        val gridLayoutManager = GridLayoutManager(this, 2)
+        scrollListener = object : EndlessRecyclerViewScrollListener(gridLayoutManager) {
             var isKeyboardDismissedByScroll = false
 
             override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
-                vm.fetchImages(page)
+                vm.fetchImages()
             }
 
             //Hide Keyboard when scroll Dragging
@@ -89,14 +80,13 @@ class MainActivity : AppCompatActivity() {
                         isKeyboardDismissedByScroll = !isKeyboardDismissedByScroll
                     }
                 } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    //The RecyclerView is not currently scrolling.
                     isKeyboardDismissedByScroll = false
                 }
             }
         }
 
-        imageListAdapter = ImageListAdapter()
         rv_images.apply {
-            layoutManager = linearLayoutManager
             addOnScrollListener(scrollListener)
             rv_images.adapter = imageListAdapter
         }
@@ -109,6 +99,7 @@ class MainActivity : AppCompatActivity() {
             override fun afterTextChanged(editable: Editable?) {
                 val clearIcon = if (editable?.isNotEmpty() == true) R.drawable.ic_clear else 0
                 ed_search.setCompoundDrawablesWithIntrinsicBounds(0, 0, clearIcon, 0)
+
                 job?.cancel()
                 job = MainScope().launch {
                     delay(500L)
@@ -116,7 +107,7 @@ class MainActivity : AppCompatActivity() {
                         if (editable.toString().isNotEmpty()) {
                             //init
                             initPage()
-                            vm.fetchImages(1)
+                            vm.fetchImages()
                         }
                     }
                 }
@@ -143,6 +134,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupFilter() {
         vm.filter.observe(this, Observer {
+            //when filter's data changed, spinner data change too
             spinner.adapter =
                 ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, it.toTypedArray())
             spinner.setSelection(beforeSelected)

@@ -11,13 +11,21 @@ import com.ellen.kakaoimages.data.model.ImagesDocuments
 import com.ellen.kakaoimages.databinding.ItemSearchImageBinding
 import com.ellen.kakaoimages.util.Constants.Companion.FILTER
 
-class ImageListAdapter: RecyclerView.Adapter<ImageListAdapter.ImageViewHolder>(), Filterable {
+class ImageListAdapter : RecyclerView.Adapter<ImageListAdapter.ImageViewHolder>(), Filterable {
 
-    var unFilteredList: ArrayList<ImagesDocuments> = ArrayList()
-    var filteredList: ArrayList<ImagesDocuments> = unFilteredList
+    inner class ImageViewHolder(private val viewBinding: ItemSearchImageBinding) :
+        RecyclerView.ViewHolder(viewBinding.root) {
+        fun onBind(position: Int) {
+            val row = filteredList[position]
+            viewBinding.item = row
+        }
+    }
 
-    var addedList: ArrayList<ImagesDocuments> = ArrayList()
-    private var filteredposition = 0
+    private var unFilteredList: ArrayList<ImagesDocuments> = ArrayList()
+    private var filteredList: ArrayList<ImagesDocuments> = unFilteredList
+
+    private var addedList: ArrayList<ImagesDocuments> = ArrayList()
+    private var filteredPosition = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
         val viewBinding: ItemSearchImageBinding = DataBindingUtil.inflate(
@@ -34,7 +42,6 @@ class ImageListAdapter: RecyclerView.Adapter<ImageListAdapter.ImageViewHolder>()
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
         holder.onBind(position)
-
     }
 
     fun setImages(items: List<ImagesDocuments>) {
@@ -42,7 +49,7 @@ class ImageListAdapter: RecyclerView.Adapter<ImageListAdapter.ImageViewHolder>()
         this.unFilteredList.addAll(items)
 
         if (FILTER != "ALL") {
-            filteredposition = position;
+            filteredPosition = position
             addedList = items as ArrayList<ImagesDocuments>
             filter.filter(FILTER)
         } else {
@@ -57,35 +64,22 @@ class ImageListAdapter: RecyclerView.Adapter<ImageListAdapter.ImageViewHolder>()
         notifyDataSetChanged()
     }
 
-    inner class ImageViewHolder(private val viewBinding: ItemSearchImageBinding) :
-        RecyclerView.ViewHolder(viewBinding.root) {
-
-        fun onBind(position: Int) {
-            val row = filteredList[position]
-            viewBinding.item = row
+    override fun getFilter(): Filter {
+        return if (addedList.isNotEmpty()) {
+            loadMoreFilter
+        } else{
+            //when spinner item selected
+            firstLoadFilter
         }
     }
 
-    override fun getFilter(): Filter {
-        return if (addedList.isNotEmpty() && FILTER != "ALL") {
-            loadMoreFilter
-        } else
-            collectionFilter
-    }
-
-    private val collectionFilter: Filter = object : Filter() {
+    private val firstLoadFilter: Filter = object : Filter() {
         //Automatic on background thread
         override fun performFiltering(constraint: CharSequence): FilterResults {
             filteredList = if (constraint == "ALL" || constraint.isEmpty()) {
                 unFilteredList
             } else {
-                val filteringList = ArrayList<ImagesDocuments>()
-                for (item in unFilteredList) {
-                    if (item.collection == constraint.toString()) {
-                        filteringList.add(item)
-                    }
-                }
-                filteringList
+                unFilteredList.filter { it.collection == constraint.toString() } as ArrayList
             }
             val results = FilterResults()
             results.values = filteredList
@@ -105,12 +99,7 @@ class ImageListAdapter: RecyclerView.Adapter<ImageListAdapter.ImageViewHolder>()
     private val loadMoreFilter: Filter = object : Filter() {
         //Automatic on background thread
         override fun performFiltering(constraint: CharSequence): FilterResults {
-            val filteringList = ArrayList<ImagesDocuments>()
-            for (item in addedList) {
-                if (item.collection == constraint.toString()) {
-                    filteringList.add(item)
-                }
-            }
+            val filteringList = addedList.filter { it.collection == constraint.toString() }
             addedList = ArrayList() //when filter was changed it have to reset
             val results = FilterResults()
             results.values = filteringList
@@ -124,7 +113,7 @@ class ImageListAdapter: RecyclerView.Adapter<ImageListAdapter.ImageViewHolder>()
         ) {
             val filteredAddedList = results.values as ArrayList<ImagesDocuments>
             filteredList.addAll(filteredAddedList)
-            notifyItemRangeInserted(filteredposition, filteredAddedList.size)
+            notifyItemRangeInserted(filteredPosition, filteredAddedList.size)
         }
     }
 }

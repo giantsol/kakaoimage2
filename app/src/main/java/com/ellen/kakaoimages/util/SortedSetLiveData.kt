@@ -15,7 +15,7 @@ class SortedSetLiveData<V> : LiveData<SortedSet<V>>() {
     fun add(v: V) {
         val oldData = value
         value = if (oldData == null) {
-            sortedSetOf(v)
+            sortedSetOf(v) //return a new set with given element
         } else {
             oldData.add(v)
             oldData
