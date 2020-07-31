@@ -55,6 +55,8 @@
         <TextView
             android:id="@+id/tv_error"
             style="@style/TextViewContent"
+            android:ellipsize="none"
+            android:singleLine="false"
             android:text="@{viewModel.showError}"
             android:visibility="@{viewModel.showError == null ? View.GONE : View.VISIBLE}"
             app:layout_constraintBottom_toBottomOf="parent"

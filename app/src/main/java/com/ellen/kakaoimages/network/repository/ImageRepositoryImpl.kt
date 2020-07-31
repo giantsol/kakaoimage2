@@ -1,7 +1,7 @@
 package com.ellen.kakaoimages.network.repository
 
 import com.ellen.kakaoimages.network.ImageApi
-import com.ellen.kakaoimages.data.model.ImagesResponse
+import com.ellen.kakaoimages.data.ImagesResponse
 import com.ellen.kakaoimages.network.util.NetworkState
 
 class ImageRepositoryImpl(
