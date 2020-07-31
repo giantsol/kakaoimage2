@@ -87,6 +87,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         rv_images.apply {
+            layoutManager = gridLayoutManager
             addOnScrollListener(scrollListener)
             rv_images.adapter = imageListAdapter
         }

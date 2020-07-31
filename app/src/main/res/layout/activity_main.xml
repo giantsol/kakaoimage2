@@ -36,7 +36,6 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:visibility="@{viewModel.showError == null ? View.VISIBLE : View.GONE}"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/spinner"
             tools:listitem="@layout/item_search_image" />
