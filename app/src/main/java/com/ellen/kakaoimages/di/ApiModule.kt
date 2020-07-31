@@ -1,6 +1,6 @@
 package com.ellen.kakaoimages.di
 
-import com.ellen.kakaoimages.network.ImageApi
+import com.ellen.kakaoimages.api.ImageApi
 import org.koin.dsl.module
 import retrofit2.Retrofit
 

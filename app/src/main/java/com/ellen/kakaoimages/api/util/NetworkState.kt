@@ -1,4 +1,4 @@
-package com.ellen.kakaoimages.network.util
+package com.ellen.kakaoimages.api.util
 
 sealed class NetworkState<out T> {
     class Success<T>(val data: T) : NetworkState<T>()

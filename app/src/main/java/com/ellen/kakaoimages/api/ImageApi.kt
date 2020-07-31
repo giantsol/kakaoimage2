@@ -1,4 +1,4 @@
-package com.ellen.kakaoimages.network
+package com.ellen.kakaoimages.api
 
 import com.ellen.kakaoimages.data.ImagesResponse
 import retrofit2.Response

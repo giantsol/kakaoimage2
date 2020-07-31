@@ -1,8 +1,8 @@
-package com.ellen.kakaoimages.network.repository
+package com.ellen.kakaoimages.api.repository
 
-import com.ellen.kakaoimages.network.ImageApi
+import com.ellen.kakaoimages.api.ImageApi
 import com.ellen.kakaoimages.data.ImagesResponse
-import com.ellen.kakaoimages.network.util.NetworkState
+import com.ellen.kakaoimages.api.util.NetworkState
 
 class ImageRepositoryImpl(
     private val api: ImageApi

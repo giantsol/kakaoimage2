@@ -1,12 +1,12 @@
 package com.ellen.kakaoimages.ui.viewmodel
 
 import androidx.lifecycle.LiveData
-import com.ellen.kakaoimages.network.repository.ImageRepository
+import com.ellen.kakaoimages.api.repository.ImageRepository
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ellen.kakaoimages.data.model.ImagesDocuments
-import com.ellen.kakaoimages.network.util.NetworkState
+import com.ellen.kakaoimages.api.util.NetworkState
 import com.ellen.kakaoimages.util.Constants.Companion.FILTER
 import com.ellen.kakaoimages.util.SortedSetLiveData
 import kotlinx.coroutines.launch

@@ -1,8 +1,8 @@
 package com.ellen.kakaoimages.di
 
-import com.ellen.kakaoimages.network.ImageApi
-import com.ellen.kakaoimages.network.repository.ImageRepository
-import com.ellen.kakaoimages.network.repository.ImageRepositoryImpl
+import com.ellen.kakaoimages.api.ImageApi
+import com.ellen.kakaoimages.api.repository.ImageRepository
+import com.ellen.kakaoimages.api.repository.ImageRepositoryImpl
 import org.koin.dsl.module
 
 val repositoryModule = module {
