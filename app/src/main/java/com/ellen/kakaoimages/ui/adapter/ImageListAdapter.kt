@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ellen.kakaoimages.R
 import com.ellen.kakaoimages.data.model.ImagesDocuments
 import com.ellen.kakaoimages.databinding.ItemSearchImageBinding
-import com.ellen.kakaoimages.util.Constants.Companion.FILTER
 
 class ImageListAdapter: RecyclerView.Adapter<ImageListAdapter.ImageViewHolder>(), Filterable {
 
@@ -18,6 +17,7 @@ class ImageListAdapter: RecyclerView.Adapter<ImageListAdapter.ImageViewHolder>()
 
     var addedList: ArrayList<ImagesDocuments> = ArrayList()
     private var filteredposition = 0
+    private var currFilter = "ALL"
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
         val viewBinding: ItemSearchImageBinding = DataBindingUtil.inflate(
@@ -41,10 +41,10 @@ class ImageListAdapter: RecyclerView.Adapter<ImageListAdapter.ImageViewHolder>()
         val position = filteredList.size
         this.unFilteredList.addAll(items)
 
-        if (FILTER != "ALL") {
+        if (currFilter != "ALL") {
             filteredposition = position;
             addedList = items as ArrayList<ImagesDocuments>
-            filter.filter(FILTER)
+            filter.filter(currFilter)
         } else {
             filteredList = unFilteredList
             notifyItemRangeInserted(position, items.size)
@@ -57,6 +57,11 @@ class ImageListAdapter: RecyclerView.Adapter<ImageListAdapter.ImageViewHolder>()
         notifyDataSetChanged()
     }
 
+    fun setCurrFilter(currFilter: String) {
+        this.currFilter = currFilter
+        filter.filter(currFilter)
+    }
+
     inner class ImageViewHolder(private val viewBinding: ItemSearchImageBinding) :
         RecyclerView.ViewHolder(viewBinding.root) {
 
@@ -67,7 +72,7 @@ class ImageListAdapter: RecyclerView.Adapter<ImageListAdapter.ImageViewHolder>()
     }
 
     override fun getFilter(): Filter {
-        return if (addedList.isNotEmpty() && FILTER != "ALL") {
+        return if (addedList.isNotEmpty() && currFilter != "ALL") {
             loadMoreFilter
         } else
             collectionFilter

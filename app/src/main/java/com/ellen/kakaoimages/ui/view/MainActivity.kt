@@ -157,8 +157,7 @@ class MainActivity : AppCompatActivity() {
                 id: Long
             ) {
                 if (beforeSelected != position) {
-                    Constants.FILTER = spinner.selectedItem.toString()
-                    imageListAdapter.filter.filter(Constants.FILTER)
+                    vm.setCurrFilter(spinner.selectedItem.toString())
                 }
 
                 beforeSelected = position

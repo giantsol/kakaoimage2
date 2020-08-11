@@ -1,12 +1,12 @@
 package com.ellen.kakaoimages.ui.viewmodel
 
+import androidx.lifecycle.LiveData
 import com.ellen.kakaoimages.network.repository.ImageRepository
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ellen.kakaoimages.data.model.ImagesDocuments
 import com.ellen.kakaoimages.network.util.NetworkState
-import com.ellen.kakaoimages.util.Constants.Companion.FILTER
 import com.ellen.kakaoimages.util.SortedSetLiveData
 import kotlinx.coroutines.launch
 
@@ -18,6 +18,9 @@ class ImageViewModel(private val repository: ImageRepository) : ViewModel() {
 
     val filter = SortedSetLiveData<String>()
     val imageList = MutableLiveData<List<ImagesDocuments>>()
+
+    private val _currFilter = MutableLiveData<String>()
+    val currFilter: LiveData<String> get() = _currFilter
 
     fun fetchImages(page: Int) {
         showLoading.value = true
@@ -44,16 +47,26 @@ class ImageViewModel(private val repository: ImageRepository) : ViewModel() {
 
     private fun setFilter(data: List<ImagesDocuments>) {
         for (item in data) {
-            if (filter.isEmpty())
-                filter.add("ALL")
-            filter.add(item.collection)
+            //Kotlin 스럽게
+            with (filter) {
+                if (isEmpty()) {
+                    add("ALL")
+                }
+                add(item.collection)
+            }
+//            if (filter.isEmpty())
+//                filter.add("ALL")
+//            filter.add(item.collection)
         }
     }
 
+    fun setCurrFilter(filter:String){
+        _currFilter.value = filter
+    }
     fun init() {
         showError.value = null
         showLoading.value = false
-        FILTER = "ALL"
+        _currFilter.value = "ALL"
         filter.clear()
     }
 }
