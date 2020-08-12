@@ -26,6 +26,7 @@ class ImageViewModel(private val repository: ImageRepository) : ViewModel() {
         showLoading.value = true
         viewModelScope.launch {
             val result = repository.fetchImages(searchQuery.value.toString(), page)
+            // 여기 어짜피 mainthread일텐데 postValue()를 할 필요가 있나?
             showLoading.postValue(false)
             when (result) {
                 is NetworkState.Success -> {

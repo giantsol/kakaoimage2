@@ -6,8 +6,7 @@ import com.ellen.kakaoimages.network.util.NetworkState
 
 class ImageRepositoryImpl(
     private val api: ImageApi
-) :
-    ImageRepository {
+) : ImageRepository {
     companion object {
         private const val DEFAULT_SIZE = 50
     }

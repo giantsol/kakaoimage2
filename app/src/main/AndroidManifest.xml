@@ -22,7 +22,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.ellen.kakaoimages.ui.view.MainActivity"></activity>
+        <!-- IDE 상으로 볼 떄 노란줄은 최대한 없애도록 하는게 좋아 -->
+        <activity android:name="com.ellen.kakaoimages.ui.view.MainActivity" />
     </application>
 
 </manifest>

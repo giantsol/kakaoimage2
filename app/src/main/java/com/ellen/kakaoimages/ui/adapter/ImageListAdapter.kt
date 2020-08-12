@@ -66,6 +66,10 @@ class ImageListAdapter: RecyclerView.Adapter<ImageListAdapter.ImageViewHolder>()
         RecyclerView.ViewHolder(viewBinding.root) {
 
         fun onBind(position: Int) {
+            // 필터 바꿀때마다 이전 이미지가 잠깐 나오면서 번쩍하는건 Glide와 관련있을거야
+            // 아마 viewBinding.item = row 바로 아랫줄에 viewBinding.executePendingBindings()를 해주거나
+            // 또는 adapter의 onViewRecycled()에서 ImageView의 src를 clear해주면 개선될거야.
+            // 다른 코드들과 어떻게 연관되느냐에 따라 다르긴 하겠지만 보통은 그런식으로 해!
             val row = filteredList[position]
             viewBinding.item = row
         }

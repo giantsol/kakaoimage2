@@ -18,6 +18,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <!--
+        Two-way binding이네! 이게 실제로 어떻게 가능한건지 알아두면 좋아.
+        왜냐면 LiveData는 값이 바뀔때마다 notify할거고 그럼 text가 또 바뀌면서 notify하고 그럼 또 LiveData가..
+        등등 하면서 infinite loop이 돌 수 있을거같은데 실제로는 안그러잖아?
+        왜 안그런지 알아두면 좋아.
+        -->
         <EditText
             android:id="@+id/ed_search"
             style="@style/EditTextInput"
@@ -32,6 +38,8 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ed_search" />
 
+        <!-- 여기서 layoutManager를 넣는줄알았더니 실제론 코드에서 넣고있더라구?
+        헷갈릴 여지 있으니까 여기선 빼주는게좋겠따 -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_images"
             android:layout_width="match_parent"
